@@ -106,6 +106,8 @@ myrule(element(block, _1, C),
 %
 % End Transformation Rules
 %
+element_children(element(_1, _2, Children), Children).
+
 wrap_paragraph(Item, paragraph(Item)).
 body_paragraphs(T, P) :- body_paragraphs(T, [], P).
 
