@@ -27,40 +27,47 @@ stext(Input) :-
 % Transformation Rules
 %
 
-font_rule([name='CMR8',size='7.97'], Children, subtitle(ChildrenOut)) :-
-  transform(Children, ChildrenOut).
+font_rule([name='CMBX10',size='9.963'], Children, heading(1, Children)).
+font_rule([name='CMCSC10',size='9.963'], Children, heading(2, Children)).
+font_rule([name='CMR8',size='7.97'], Children, subtitle(Children)).
+font_rule([name='CMR10', size='9.963'], Children, body(Children)).
+font_rule([name='CMR7',size='6.974'], Children, footer(Children)).
 
-font_rule([name='CMCSC10',size='9.963'], Children, heading(2, ChildrenOut)) :-
-  transform(Children, ChildrenOut).
-
-font_rule([name='CMBX10',size='9.963'], Children, heading(1, ChildrenOut)) :-
-  transform(Children, ChildrenOut).
-
-font_rule([name='CMR10', size='9.963'], Children, body(ChildrenOut)) :-
-  transform(Children, ChildrenOut).
-
-myrule(
-  element(font, A, Text),
-  Out
-) :-
-  font_rule(A, Text, Out).
+% font_rule invocation
+myrule(element(font, A, Text), Out) :-
+  font_rule(A, Out0, Out),
+  transform(Text, Out0).
 
 
+% document-element
 myrule(element(document, _A, Children),
-       element(document, [], Out)) :-
+       document(Out)) :-
   once(member(element(A, B, C), Children)),
   transform([element(A,B,C)], Out).
 
+% page-element
+myrule(element(page, _A, Children),
+       page(Out)) :-
+  transform(Children, Out).
+
+% line-element
 myrule(element(line, A, Children),
        line(bbox(Bbox), Out)) :-
   transform(Children, Out),
   member(bbox=Bbox, A).
 
+% block-element
+myrule(element(block, _A, Children),
+       block(Out)) :-
+  transform(Children, Out).
+
+% generic recursive rule
 myrule(element(El, _A, Children),
        element(El, [], ChildrenOut)) :-
   attributes_not_important(El),
   transform(Children, ChildrenOut).
 
+% char
 myrule(element(char, A, _C),
        c(Char)) :-
   member(c = Char, A).
@@ -103,7 +110,15 @@ get_element(failure(R), R).
 
 write_commands(Commands, Stream) :-
   %format(Stream, "~w", [Commands]).
-  print_term(Commands, [output(Stream)]).
+  print_term(
+    Commands,
+    [
+      output(Stream),
+      right_margin(60),
+      % tab_width(2),
+      indent_arguments(true)
+    ]
+  ).
 
 stext_from_testfile :-
   stext_from_file("samples/hello.txt").
