@@ -52,10 +52,11 @@ myrule(element(page, _A, Children),
 
 % line-element
 myrule(element(line, A, Children),
-       line(x(X), Out)) :-
+       line(Indentation, Out)) :-
   transform(Children, Out),
   member(bbox=Bbox, A),
-  bbox_x(Bbox, X).
+  bbox_x(Bbox, X),
+  classify_indentation(X, Indentation).
 
 % block-element
 myrule(element(block, _A, Children),
@@ -134,6 +135,10 @@ user_input(Input) :-
   stream_property(Input, alias(user_input)).
 
 
+classify_indentation(126.672039, none).
+classify_indentation(138.62804, indented).
+classify_indentation(X, aligned_differently) :-
+  X > 138.62804.
 
 bbox_x(Bbox, X) :-
   split_string(Bbox, [' '], [], [First | _]),
