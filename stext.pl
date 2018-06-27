@@ -67,6 +67,7 @@ myrule(element(char, A, _C),
        c(Char)) :-
   member(c = Char, A).
 
+% Remove e.g '\n'
 myrule(Atom, removed) :- atom(Atom).
 
 
