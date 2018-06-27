@@ -135,10 +135,9 @@ user_input(Input) :-
   stream_property(Input, alias(user_input)).
 
 
-classify_indentation(126.672039, none).
-classify_indentation(138.62804, indented).
-classify_indentation(X, aligned_differently) :-
-  X > 138.62804.
+classify_indentation(X, none) :- X < 138.
+classify_indentation(X, indented) :- 138 =< X, X < 140.
+classify_indentation(X, aligned_differently) :- 140 =< X.
 
 bbox_x(Bbox, X) :-
   split_string(Bbox, [' '], [], [First | _]),
