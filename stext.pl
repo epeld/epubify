@@ -143,7 +143,8 @@ body_paragraphs([ element(body_line, [ indented ], [ S ]) | Rest],
 body_paragraphs([ element(body_line, [ none ], [ S ]) | Rest],
                 [SPrev | Paragraphs],
                 Out) :-
-  string_concat(SPrev, S, SNext),
+  string_concat(SPrev, " ", SNext0),
+  string_concat(SNext0, S, SNext),
   body_paragraphs(Rest, [SNext | Paragraphs], Out).
 
 stringified(C, S) :-
