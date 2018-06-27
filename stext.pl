@@ -52,9 +52,10 @@ myrule(element(page, _A, Children),
 
 % line-element
 myrule(element(line, A, Children),
-       line(bbox(Bbox), Out)) :-
+       line(x(X), Out)) :-
   transform(Children, Out),
-  member(bbox=Bbox, A).
+  member(bbox=Bbox, A),
+  bbox_x(Bbox, X).
 
 % block-element
 myrule(element(block, _A, Children),
