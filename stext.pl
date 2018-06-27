@@ -72,10 +72,40 @@ myrule(element(char, A, _C),
 % Remove e.g '\n'
 myrule(Atom, removed) :- atom(Atom).
 
+%
+% 'Semantic' rules
+%
+myrule(element(line, A, Text),
+       element(heading, [n=N | A], C3)) :-
+  member(heading(N, C), Text),
+  stringified(C, C3).
+
+myrule(element(line, A, Text),
+       element(subtitle, A, C2)) :-
+  member(subtitle(C), Text),
+  stringified(C, C2).
+
+myrule(element(line, A, Text),
+       element(body_line, A, C2)) :-
+  member(body(C), Text),
+  stringified(C, C2).
+
+myrule(element(block, _1, C),
+       removed) :-
+  member(element(line, _2, C2), C),
+  member(footer(_3), C2).
+
 
 %
 % End Transformation Rules
 %
+stringified(C, S) :-
+  maplist(to_code, C, Codes),
+  append(Codes, Codes2),
+  string_codes(C2, Codes2),
+  split_string(C2, [], " ", S).
+
+to_code(c(S), C) :- string_codes(S, C).
 
 %
 % Perform transformation rules recursively
