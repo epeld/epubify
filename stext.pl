@@ -61,11 +61,6 @@ myrule(element(block, _A, Children),
        block(Out)) :-
   transform(Children, Out).
 
-% generic recursive rule
-myrule(element(El, _A, Children),
-       element(El, [], ChildrenOut)) :-
-  attributes_not_important(El),
-  transform(Children, ChildrenOut).
 
 % char
 myrule(element(char, A, _C),
@@ -74,9 +69,6 @@ myrule(element(char, A, _C),
 
 myrule(Atom, removed) :- atom(Atom).
 
-attributes_not_important(line).
-attributes_not_important(block).
-attributes_not_important(page).
 
 %
 % End Transformation Rules
