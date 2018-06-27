@@ -138,3 +138,19 @@ with_open_file(FileName, Mode, Options, Goal) :-
 
 user_input(Input) :-
   stream_property(Input, alias(user_input)).
+
+
+
+bbox_x(Bbox, X) :-
+  split_string(Bbox, [' '], [], [First | _]),
+  read_term_from_atom(First, X, []),
+  number(X).
+
+:- begin_tests(stext).
+
+test(bbox_x) :-
+  bbox_x('126.67302 676.25869 485.3213 688.40359',
+        126.67302).
+
+
+:- end_tests(stext).
