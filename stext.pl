@@ -1,5 +1,6 @@
 :- module(stext, [stext/0]).
 
+% mutool draw -X -Fstext -o/tmp/test.txt ~/Downloads/halmos.pdf 20 > samples/hello2.txt
 
 % TODO remove this clause
 stext :-
@@ -78,8 +79,7 @@ myrule(element(block, _A, Children),
 myrule(element(block, _A, Children),
        element(block, [], Out)) :-
   member(element(body_line, _1, _2), Children),
-  body_paragraphs(Children, Out0),
-  maplist(wrap_paragraph, Out0, Out).
+  body_paragraphs(Children, Out).
 
 % char
 myrule(element(char, A, _C),
@@ -131,21 +131,33 @@ semantic_elements(element(block, [], Children),
 
 element_children(element(_1, _2, Children), Children).
 
-wrap_paragraph(Item, element(paragraph, [], [Item])).
+%wrap_paragraph(Item, element(paragraph, [], [Item])).
 body_paragraphs(T, P) :- body_paragraphs(T, [], P).
 
-body_paragraphs([],P, PR) :- reverse(P, PR).
-body_paragraphs([ element(body_line, [ indented ], [ S ]) | Rest],
+body_paragraphs([], P, PR) :- reverse(P, PR).
+
+body_paragraphs([ element(body_line, [ P ], [ S ]) | Rest],
                 Paragraphs,
                 Out) :-
-  body_paragraphs(Rest, [S | Paragraphs], Out).
+  member(P, [ indented, aligned_differently ]),
+  body_paragraphs(Rest, [element(paragraph, [], [ S ]) | Paragraphs], Out).
+
+%% body_paragraphs([ element(body_line, [ aligned_differently ], [ S ]) | Rest],
+%%                 Paragraphs,
+%%                 Out) :-
+%%   body_paragraphs(Rest, [element(paragraph, [], [ S ]) | Paragraphs], Out).
 
 body_paragraphs([ element(body_line, [ none ], [ S ]) | Rest],
-                [SPrev | Paragraphs],
+                [],
+                Out) :-
+  body_paragraphs(Rest, [element(paragraph, [continued], [S])], Out).
+
+body_paragraphs([ element(body_line, [ none ], [ S ]) | Rest],
+                [ element(paragraph, A, [SPrev]) | Paragraphs],
                 Out) :-
   string_concat(SPrev, " ", SNext0),
   string_concat(SNext0, S, SNext),
-  body_paragraphs(Rest, [SNext | Paragraphs], Out).
+  body_paragraphs(Rest, [element(paragraph, A, [SNext]) | Paragraphs], Out).
 
 stringified(C, S) :-
   maplist(to_code, C, Codes),
@@ -194,7 +206,7 @@ write_commands(Commands, Stream) :-
   ).
 
 stext_from_testfile :-
-  stext_from_file("samples/hello.txt").
+  stext_from_file("samples/hello3.txt").
 
 
 stext_from_file(FileName) :-
