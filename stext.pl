@@ -41,18 +41,18 @@ myrule(element(font, A, Text), Out) :-
 
 % document-element
 myrule(element(document, _A, Children),
-       document(Out)) :-
+       element(document, [], Out)) :-
   once(member(element(A, B, C), Children)),
   transform([element(A,B,C)], Out).
 
 % page-element
 myrule(element(page, _A, Children),
-       page(Out)) :-
+       element(page, [], Out)) :-
   transform(Children, Out).
 
 % line-element
 myrule(element(line, A, Children),
-       line(Indentation, Out)) :-
+       element(line, [Indentation], Out)) :-
   transform(Children, Out),
   member(bbox=Bbox, A),
   bbox_x(Bbox, X),
@@ -60,7 +60,7 @@ myrule(element(line, A, Children),
 
 % block-element
 myrule(element(block, _A, Children),
-       block(Out)) :-
+       element(block, [], Out)) :-
   transform(Children, Out).
 
 
