@@ -45,10 +45,21 @@ myrule(element(document, _A, Children),
   once(member(element(A, B, C), Children)),
   transform([element(A,B,C)], Out).
 
+myrule(element(document, _A, Children),
+       element(semantic_document, [], Out)) :-
+  maplist(=(element(semantic_page, _1, _2)), Children),
+  maplist(element_children, Children, All),
+  append(All, Out).
+
 % page-element
 myrule(element(page, _A, Children),
        element(page, [], Out)) :-
   transform(Children, Out).
+
+myrule(element(page, _A, Children),
+       element(semantic_page, [], Out)) :-
+  maplist(semantic_elements, Children, Elements),
+  append(Elements, Out).
 
 % line-element
 myrule(element(line, A, Children),
@@ -106,9 +117,21 @@ myrule(element(block, _1, C),
 %
 % End Transformation Rules
 %
+semantic(element(_1, _2, Children)) :-
+  foreach(member(C, Children),
+          (
+            string(C)
+          )
+         ).
+
+semantic_elements(element(block, [], Children),
+                  Children) :-
+  foreach(member(C, Children),
+          semantic(C)).
+
 element_children(element(_1, _2, Children), Children).
 
-wrap_paragraph(Item, paragraph(Item)).
+wrap_paragraph(Item, element(paragraph, [], [Item])).
 body_paragraphs(T, P) :- body_paragraphs(T, [], P).
 
 body_paragraphs([],P, PR) :- reverse(P, PR).
