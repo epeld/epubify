@@ -1,4 +1,4 @@
-:- module(stext, []).
+:- module(stext, [stext/0]).
 
 
 % TODO remove this clause
@@ -26,92 +26,79 @@ stext(Input) :-
 %
 % Transformation Rules
 %
-rule(
-  line(_A,
-       [ font([name='CMBX10',size='9.963'],
-              Text)
-       ]),
-  heading(1, Text)
-).
 
-rule(
-  line(_A,
-       [font([name='CMR8',size='7.97'], Text)]),
-  subtitle(Text)
-).
+font_rule([name='CMR8',size='7.97'], Children, subtitle(ChildrenOut)) :-
+  transform(Children, ChildrenOut).
 
-rule(
-  line(_A,
-       [ font([name='CMR10',size='9.963'], _Number),
-         font([name='CMCSC10',size='9.963'], Text)
-       ]),
-  heading(2, Text)
-).
+font_rule([name='CMCSC10',size='9.963'], Children, heading(2, ChildrenOut)) :-
+  transform(Children, ChildrenOut).
 
-rule(
-  line(_A,
-       [ font([name='CMR10',size='9.963'],
-              Text)
-       ]),
-  body(line(Text))
-).
+font_rule([name='CMBX10',size='9.963'], Children, heading(1, ChildrenOut)) :-
+  transform(Children, ChildrenOut).
+
+font_rule([name='CMR10', size='9.963'], Children, body(ChildrenOut)) :-
+  transform(Children, ChildrenOut).
+
+myrule(
+  element(font, A, Text),
+  Out
+) :-
+  font_rule(A, Text, Out).
+
+
+myrule(element(document, _A, Children),
+       element(document, [], Out)) :-
+  once(member(element(A, B, C), Children)),
+  transform([element(A,B,C)], Out).
+
+myrule(element(line, A, Children),
+       line(bbox(Bbox), Out)) :-
+  transform(Children, Out),
+  member(bbox=Bbox, A).
+
+myrule(element(El, _A, Children),
+       element(El, [], ChildrenOut)) :-
+  attributes_not_important(El),
+  transform(Children, ChildrenOut).
+
+myrule(element(char, A, _C),
+       c(Char)) :-
+  member(c = Char, A).
+
+myrule(Atom, removed) :- atom(Atom).
+
+attributes_not_important(line).
+attributes_not_important(block).
+attributes_not_important(page).
 
 %
 % End Transformation Rules
 %
 
-apply_rules([], []).
-apply_rules([Item | Xml], [ItemOut | XmlOut]) :-
-  rule(Item, ItemOut).
+%
+% Perform transformation rules recursively
+% until no more transformations apply
+apply_rule(Element, Out) :-
+  (myrule(Element, Out0), Out0 \= Element) *->
+    (
+      Out = success(Out0)
+    )
+  ; failure(Element) = Out.
 
 
-transform(Xml, XmlOut) :-
-  member(element(document, _Attrs, Children),
-         Xml),
-  include(is_page, Children, Pages),
-  maplist(pretty_page, Pages, PagesOut),
-  XmlOut = PagesOut.
-
-
-pretty_page(element(page, _A, Children),
-            page(ChildrenOut)) :-
-  include(is_element, Children, Children0),
-  maplist(pretty_block, Children0, ChildrenOut).
-
-
-pretty_block(element(block, _A, Children),
-             block(ChildrenOut)) :-
-  include(is_element, Children, Children0),
-  maplist(pretty_line, Children0, ChildrenOut).
-
-
-pretty_line(element(line, A, Children),
-            line(bbox(BBox), ChildrenOut)) :-
-  member(bbox=BBox, A),
-  include(is_element, Children, Children0),
-  maplist(pretty_font, Children0, ChildrenOut).
-
-pretty_font(element(font, A, Children),
-            font(A, ChildrenOut)) :-
-  % Children = ChildrenOut.
-  include(is_element, Children, Children0),
-  maplist(pretty_char, Children0, Chars),
-  maplist(string_codes, Chars, Codes),
-  append(Codes, ChildrenOut0),
-  string_codes(ChildrenOut, ChildrenOut0)
-.
-
-pretty_char(element(char, Attrs, _C), Char) :-
-  member((c = Char), Attrs).
-
-is_element(element(_A,_B,_C)).
-
-pretty_element(element(Type, _A, Children),
-               Functor) :-
-  functor(Functor, Type, 1),
-  arg(1, Functor, Children).
-
-is_page(element(page, _A, _C)).
+transform(Xml, Out) :- 
+  maplist(apply_rule, Xml, Out0),
+  exclude(=(success(removed)),Out0, Out1),
+  maplist(get_element, Out1, Out2),
+  (
+    (
+      member(success(_), Out1)
+    )*-> (!, transform(Out2, Out))
+  ; Out2 = Out
+  ).
+  
+get_element(success(R), R).
+get_element(failure(R), R).
 
 
 write_commands(Commands, Stream) :-
