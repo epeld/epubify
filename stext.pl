@@ -63,6 +63,12 @@ myrule(element(block, _A, Children),
        element(block, [], Out)) :-
   transform(Children, Out).
 
+% block-element (after converting to body_lines)
+myrule(element(block, _A, Children),
+       element(block, [], Out)) :-
+  member(element(body_line, _1, _2), Children),
+  body_paragraphs(Children, Out0),
+  maplist(wrap_paragraph, Out0, Out).
 
 % char
 myrule(element(char, A, _C),
@@ -96,9 +102,25 @@ myrule(element(block, _1, C),
   member(footer(_3), C2).
 
 
+
 %
 % End Transformation Rules
 %
+wrap_paragraph(Item, paragraph(Item)).
+body_paragraphs(T, P) :- body_paragraphs(T, [], P).
+
+body_paragraphs([],P, PR) :- reverse(P, PR).
+body_paragraphs([ element(body_line, [ indented ], [ S ]) | Rest],
+                Paragraphs,
+                Out) :-
+  body_paragraphs(Rest, [S | Paragraphs], Out).
+
+body_paragraphs([ element(body_line, [ none ], [ S ]) | Rest],
+                [SPrev | Paragraphs],
+                Out) :-
+  string_concat(SPrev, S, SNext),
+  body_paragraphs(Rest, [SNext | Paragraphs], Out).
+
 stringified(C, S) :-
   maplist(to_code, C, Codes),
   append(Codes, Codes2),
