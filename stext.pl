@@ -16,7 +16,7 @@ stext(Input) :-
   format("Done..~n"),
   !,
   with_open_file("/tmp/out.txt", write, [],
-                 write_commands(XmlOut)),
+                 stext:write_commands(XmlOut)),
   !,
   format("File Written~n").
 

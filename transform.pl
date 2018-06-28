@@ -33,20 +33,21 @@ get_element(failure(R), R).
 
 
 % tarpit.pdf
-font_rule([name='CMTI10',size='9.963'], Children, italic(Children)).
-font_rule([name='CMBX12',size='9.963'], Children, heading(2, Children)).
+font_rule(name='CMTI10', Children, italic(Children)).
+font_rule(name='CMBX12', Children, heading(2, Children)).
 
 % halmos.pdf
-font_rule([name='CMBX10',size='9.963'], Children, heading(1, Children)).
-font_rule([name='CMCSC10',size='9.963'], Children, heading(2, Children)).
-font_rule([name='CMR8',size='7.97'], Children, subtitle(Children)).
-font_rule([name='CMR10', size='9.963'], Children, body(Children)).
-font_rule([name='CMR7',size='6.974'], Children, footer(Children)).
+font_rule(name='CMBX10', Children, heading(1, Children)).
+font_rule(name='CMCSC10', Children, heading(2, Children)).
+font_rule(name='CMR8', Children, subtitle(Children)).
+font_rule(name='CMR10', Children, body(Children)).
+font_rule(name='CMR7', Children, footer(Children)).
 
 
 % font_rule invocation
 myrule(element(font, A, Text), Out) :-
-  font_rule(A, Out0, Out),
+  font_rule(Name, Out0, Out),
+  member(Name, A),
   transform(Text, Out0).
 
 
