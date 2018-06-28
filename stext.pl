@@ -39,8 +39,8 @@ myrule(element(font, A, Text), Out) :-
 % document-element
 myrule(element(document, _A, Children),
        element(document, [], Out)) :-
-  once(member(element(A, B, C), Children)),
-  transform([element(A,B,C)], Out).
+  % once(member(element(A, B, C), Children)),
+  transform(Children, Out).
 
 myrule(element(document, _A, Children),
        element(semantic_document, [], Out)) :-
