@@ -1,4 +1,4 @@
-:- module(stext, [stext/0]).
+:- module(stext, [stext/2]).
 
 with_open_file(FileName, Mode, Options, Goal) :-
   setup_call_cleanup(
@@ -8,8 +8,11 @@ with_open_file(FileName, Mode, Options, Goal) :-
   ).
 
 
-stext :-
-  stext_from_testfile.
+stext(test, Page) :-
+  stext_from_testfile(Page).
+
+stext(file(FileName), Page) :-
+  stext_from_file(FileName, Page).
 
 
 
@@ -21,8 +24,8 @@ stext(Input) :-
   !,
   with_open_file("/tmp/out.txt", write, [],
                  write_commands(XmlOut)),
-
-  !.
+  !,
+  format("File Written~n").
 
 
 %
@@ -206,13 +209,13 @@ write_commands(Commands, Stream) :-
     ]
   ).
 
-stext_from_testfile :-
-  stext_from_file("~/Downloads/tarpit.pdf").
+stext_from_testfile(Page) :-
+  stext_from_file("/home/erik/Downloads/tarpit_booklet.pdf", Page).
 
 
-stext_from_file(FileName) :-
+stext_from_file(FileName, Page) :-
   setup_call_cleanup(
-    mutool_draw(FileName, all, Stream),
+    mutool_draw(FileName, Page, Stream),
     stext(Stream),
     close(Stream)
   ).
