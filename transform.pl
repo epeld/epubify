@@ -1,4 +1,5 @@
 :- module(transform, [transform/2]).
+:- use_module(xml, [xml_rule/2]).
 
 transform(Xml, Out) :- 
   maplist(apply_rule, Xml, Out0),
@@ -51,11 +52,11 @@ myrule(element(font, A, Text), Out) :-
   transform(Text, Out0).
 
 
-% document-element
-myrule(element(document, _A, Children),
-       element(document, [], Out)) :-
-  % once(member(element(A, B, C), Children)),
-  transform(Children, Out).
+myrule(element(page, _A, Children),
+       element(semantic_page, [], Out)) :-
+  maplist(semantic_elements, Children, Elements),
+  append(Elements, Out).
+
 
 myrule(element(document, _A, Children),
        element(semantic_document, [], Out)) :-
@@ -63,28 +64,6 @@ myrule(element(document, _A, Children),
   maplist(element_children, Children, All),
   append(All, Out).
 
-% page-element
-myrule(element(page, _A, Children),
-       element(page, [], Out)) :-
-  transform(Children, Out).
-
-myrule(element(page, _A, Children),
-       element(semantic_page, [], Out)) :-
-  maplist(semantic_elements, Children, Elements),
-  append(Elements, Out).
-
-% line-element
-myrule(element(line, A, Children),
-       element(line, [Indentation], Out)) :-
-  transform(Children, Out),
-  member(bbox=Bbox, A),
-  bbox_x(Bbox, X),
-  classify_indentation(X, Indentation).
-
-% block-element
-myrule(element(block, _A, Children),
-       element(block, [], Out)) :-
-  transform(Children, Out).
 
 % block-element (after converting to body_lines)
 myrule(element(block, _A, Children),
@@ -92,13 +71,9 @@ myrule(element(block, _A, Children),
   member(element(body_line, _1, _2), Children),
   body_paragraphs(Children, Out).
 
-% char
-myrule(element(char, A, _C),
-       c(Char)) :-
-  member(c = Char, A).
 
-% Remove e.g '\n'
-myrule(Atom, removed) :- atom(Atom).
+myrule(El, Out) :-
+  xml_rule(El, Out).
 
 %
 % 'Semantic' rules
@@ -175,21 +150,3 @@ stringified(C, S) :-
 to_code(c(S), C) :- string_codes(S, C).
 
 
-classify_indentation(X, none) :- X < 138.
-classify_indentation(X, indented) :- 138 =< X, X < 140.
-classify_indentation(X, aligned_differently) :- 140 =< X.
-
-% Given a bbox-attribute, parse out the x-coordiante
-bbox_x(Bbox, X) :-
-  split_string(Bbox, [' '], [], [First | _]),
-  read_term_from_atom(First, X, []),
-  number(X).
-
-:- begin_tests(transform).
-
-test(bbox_x) :-
-  bbox_x('126.67302 676.25869 485.3213 688.40359',
-        126.67302).
-
-
-:- end_tests(transform).
