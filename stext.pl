@@ -7,10 +7,6 @@ stext :-
   !,
   stext_from_testfile.
 
-stext :-
-  user_input(Input),
-  stext(Input).
-
 
 
 
@@ -210,19 +206,41 @@ stext_from_testfile :-
 
 
 stext_from_file(FileName) :-
-  with_open_file(FileName, read, [type(binary)], stext:stext).
-
-
-with_open_file(FileName, Mode, Options, Goal) :-
   setup_call_cleanup(
-    open(FileName, Mode, Stream, Options),
-    call(Goal, Stream),
+    mutool_draw(FileName, all, Stream),
+    stext(Stream),
     close(Stream)
   ).
 
 
-user_input(Input) :-
-  stream_property(Input, alias(user_input)).
+mutool_draw(FileName, Page, StdOut) :-
+  mutool_draw_args(FileName, Page, Args),
+  process_create(
+    path(mutool),
+    Args,
+    [
+      stdout(pipe(StdOut))
+    ]
+  ).
+
+
+mutool_draw_args(FileName, all, Args) :-
+  Args = [
+    'draw',
+    '-X',
+    '-Fstext',
+    FileName
+  ].
+
+mutool_draw_args(FileName, Page, Args) :-
+  number(Page),
+  Args = [
+    'draw',
+    '-X',
+    '-Fstext',
+    FileName
+  ].
+
 
 
 classify_indentation(X, none) :- X < 138.
