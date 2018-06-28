@@ -34,7 +34,6 @@ stext_from_file(FileName, Page) :-
 
 
 write_commands(Commands, Stream) :-
-  %format(Stream, "~w", [Commands]).
   print_term(
     Commands,
     [
