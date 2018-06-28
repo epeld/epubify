@@ -243,7 +243,8 @@ mutool_draw_args(FileName, Page, Args) :-
     'draw',
     '-X',
     '-Fstext',
-    FileName
+    FileName,
+    Page
   ].
 
 
