@@ -171,3 +171,22 @@ stringified(C, S) :-
   split_string(C2, [], " ", S).
 
 to_code(c(S), C) :- string_codes(S, C).
+
+
+classify_indentation(X, none) :- X < 138.
+classify_indentation(X, indented) :- 138 =< X, X < 140.
+classify_indentation(X, aligned_differently) :- 140 =< X.
+
+bbox_x(Bbox, X) :-
+  split_string(Bbox, [' '], [], [First | _]),
+  read_term_from_atom(First, X, []),
+  number(X).
+
+:- begin_tests(transform).
+
+test(bbox_x) :-
+  bbox_x('126.67302 676.25869 485.3213 688.40359',
+        126.67302).
+
+
+:- end_tests(transform).
