@@ -177,6 +177,7 @@ classify_indentation(X, none) :- X < 138.
 classify_indentation(X, indented) :- 138 =< X, X < 140.
 classify_indentation(X, aligned_differently) :- 140 =< X.
 
+% Given a bbox-attribute, parse out the x-coordiante
 bbox_x(Bbox, X) :-
   split_string(Bbox, [' '], [], [First | _]),
   read_term_from_atom(First, X, []),
