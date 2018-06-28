@@ -140,7 +140,7 @@ semantic_elements(element(block, [], Children),
 
 element_children(element(_1, _2, Children), Children).
 
-%wrap_paragraph(Item, element(paragraph, [], [Item])).
+
 body_paragraphs(T, P) :- body_paragraphs(T, [], P).
 
 body_paragraphs([], P, PR) :- reverse(P, PR).
@@ -163,6 +163,7 @@ body_paragraphs([ element(body_line, [ none ], [ S ]) | Rest],
   string_concat(SPrev, " ", SNext0),
   string_concat(SNext0, S, SNext),
   body_paragraphs(Rest, [element(paragraph, A, [SNext]) | Paragraphs], Out).
+
 
 stringified(C, S) :-
   maplist(to_code, C, Codes),
