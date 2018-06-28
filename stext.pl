@@ -47,6 +47,9 @@ write_commands(Commands, Stream) :-
 
 
 
+%
+% Utils for Invoking 'mupdf'
+%
 mutool_draw(FileName, Page, StdOut) :-
   mutool_draw_args(FileName, Page, Args),
   process_create(
