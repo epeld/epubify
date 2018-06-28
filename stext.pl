@@ -21,6 +21,18 @@ stext(Input) :-
   format("File Written~n").
 
 
+stext_from_testfile(Page) :-
+  stext_from_file("/home/erik/Downloads/out-of-the-tar-pit.pdf", Page).
+
+
+stext_from_file(FileName, Page) :-
+  setup_call_cleanup(
+    mutool_draw(FileName, Page, Stream),
+    stext(Stream),
+    close(Stream)
+  ).
+
+
 write_commands(Commands, Stream) :-
   %format(Stream, "~w", [Commands]).
   print_term(
@@ -33,17 +45,6 @@ write_commands(Commands, Stream) :-
     ]
   ).
 
-
-stext_from_testfile(Page) :-
-  stext_from_file("/home/erik/Downloads/out-of-the-tar-pit.pdf", Page).
-
-
-stext_from_file(FileName, Page) :-
-  setup_call_cleanup(
-    mutool_draw(FileName, Page, Stream),
-    stext(Stream),
-    close(Stream)
-  ).
 
 
 mutool_draw(FileName, Page, StdOut) :-
