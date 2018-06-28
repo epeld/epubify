@@ -1,12 +1,8 @@
 :- module(stext, [stext/0]).
 
-% mutool draw -X -Fstext -o/tmp/test.txt ~/Downloads/halmos.pdf 20 > samples/hello2.txt
 
-% TODO remove this clause
 stext :-
-  !,
   stext_from_testfile.
-
 
 
 
