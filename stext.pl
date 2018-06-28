@@ -32,6 +32,11 @@ stext(Input) :-
 % Transformation Rules
 %
 
+% tarpit.pdf
+font_rule([name='CMTI10',size='9.963'], Children, italic(Children)).
+font_rule([name='CMBX12',size='9.963'], Children, heading(2, Children)).
+
+% halmos.pdf
 font_rule([name='CMBX10',size='9.963'], Children, heading(1, Children)).
 font_rule([name='CMCSC10',size='9.963'], Children, heading(2, Children)).
 font_rule([name='CMR8',size='7.97'], Children, subtitle(Children)).
