@@ -198,7 +198,7 @@ write_commands(Commands, Stream) :-
   ).
 
 stext_from_testfile :-
-  stext_from_file("samples/hello3.txt").
+  stext_from_file("~/Downloads/tarpit.pdf").
 
 
 stext_from_file(FileName) :-
