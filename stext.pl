@@ -210,7 +210,7 @@ write_commands(Commands, Stream) :-
   ).
 
 stext_from_testfile(Page) :-
-  stext_from_file("/home/erik/Downloads/tarpit_booklet.pdf", Page).
+  stext_from_file("/home/erik/Downloads/out-of-the-tar-pit.pdf", Page).
 
 
 stext_from_file(FileName, Page) :-
