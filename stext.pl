@@ -15,7 +15,9 @@ stext :-
 
 stext(Input) :-
   load_xml(stream(Input), Xml, []),
+  format("Transforming..~n"),
   transform(Xml, XmlOut),
+  format("Done..~n"),
   !,
   with_open_file("/tmp/out.txt", write, [],
                  write_commands(XmlOut)),
