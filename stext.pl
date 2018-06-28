@@ -146,10 +146,6 @@ body_paragraphs([ element(body_line, [ P ], [ S ]) | Rest],
   member(P, [ indented, aligned_differently ]),
   body_paragraphs(Rest, [element(paragraph, [], [ S ]) | Paragraphs], Out).
 
-%% body_paragraphs([ element(body_line, [ aligned_differently ], [ S ]) | Rest],
-%%                 Paragraphs,
-%%                 Out) :-
-%%   body_paragraphs(Rest, [element(paragraph, [], [ S ]) | Paragraphs], Out).
 
 body_paragraphs([ element(body_line, [ none ], [ S ]) | Rest],
                 [],
