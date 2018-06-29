@@ -1,5 +1,4 @@
 :- module(transform, [transform/2]).
-:- use_module(xml, [xml_rule/2]).
 :- use_module(font, [font_rule/3]).
 
 transform(Xml, Out) :- 
@@ -139,3 +138,66 @@ stringified(C, S) :-
 to_code(c(S), C) :- string_codes(S, C).
 
 
+
+
+%
+%
+%
+
+
+
+% document-element
+xml_rule(element(document, _A, Children),
+       element(document, [], Out)) :-
+  % once(member(element(A, B, C), Children)),
+  transform(Children, Out).
+
+% page-element
+xml_rule(element(page, _A, Children),
+       element(page, [], Out)) :-
+  transform(Children, Out).
+
+% line-element
+xml_rule(element(line, A, Children),
+       element(line, [Indentation], Out)) :-
+  transform(Children, Out),
+  member(bbox=Bbox, A),
+  bbox_x(Bbox, X),
+  classify_indentation(X, Indentation).
+
+% block-element
+xml_rule(element(block, _A, Children),
+       element(block, [], Out)) :-
+  transform(Children, Out).
+
+% char
+xml_rule(element(char, A, _C),
+       c(Char)) :-
+  member(c = Char, A).
+
+% Remove e.g '\n'
+xml_rule(Atom, removed) :- atom(Atom).
+
+
+%
+% Helper predicates
+%
+
+classify_indentation(X, none) :- X < 138.
+classify_indentation(X, indented) :- 138 =< X, X < 140.
+classify_indentation(X, aligned_differently) :- 140 =< X.
+
+% Given a bbox-attribute, parse out the x-coordiante
+bbox_x(Bbox, X) :-
+  split_string(Bbox, [' '], [], [First | _]),
+  read_term_from_atom(First, X, []),
+  number(X).
+
+:- begin_tests(transform).
+
+test(bbox_x) :-
+  bbox_x('126.67302 676.25869 485.3213 688.40359',
+        126.67302).
+
+
+:- end_tests(transform).
