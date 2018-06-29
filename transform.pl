@@ -1,6 +1,6 @@
 :- module(transform,
           [
-            apply_rule/3,
+            apply_singleton_rule/3,
             apply_element_rule/3
           ]).
 :- use_module(font, [font_rule/3]).
@@ -8,6 +8,11 @@
 
 % deprecated
 transform(G, A, B) :- apply_element_rule(G, A, B).
+
+
+apply_singleton_rule(Goal, In, Out) :- 
+  apply_element_rule(Goal, [In], [Out]).
+
 
 %
 % Apply a transformation rule to list In producing list Out.

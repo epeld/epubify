@@ -1,5 +1,5 @@
 :- module(stext, [stext/2]).
-:- use_module(transform, [apply_rule/3]).
+:- use_module(transform, [apply_singleton_rule/3]).
 :- use_module(file, [with_open_file/4]).
 :- use_module(document, [transformation/2]).
 
@@ -13,7 +13,7 @@ stext(file(FileName), Page) :-
 stext(Input) :-
   load_xml(stream(Input), [Document | _], []),
   format("Transforming..~n"),
-  apply_rule(transformation, Document, XmlOut),
+  apply_singleton_rule(transformation, Document, XmlOut),
   format("Done..~n"),
   !,
   with_open_file("/tmp/out.txt", write, [],
