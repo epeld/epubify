@@ -1,5 +1,5 @@
 :- module(stext, [stext/2]).
-:- use_module(transform, [transform/2]).
+:- use_module(transform, [transform/3]).
 :- use_module(file, [with_open_file/4]).
 
 
@@ -12,7 +12,7 @@ stext(file(FileName), Page) :-
 stext(Input) :-
   load_xml(stream(Input), Xml, []),
   format("Transforming..~n"),
-  transform(Xml, XmlOut),
+  transform(myrule:myrule, Xml, XmlOut),
   format("Done..~n"),
   !,
   with_open_file("/tmp/out.txt", write, [],
