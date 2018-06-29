@@ -1,5 +1,6 @@
 :- module(document, [transformation/2]).
 :- use_module(transform, [apply_element_rule/3, apply_rule/3]).
+:- use_module(font, [font_name_style/2]).
 
 hierarchy([document, page, block, line, font]).
 
@@ -72,7 +73,25 @@ pre_hierarchical_rule(
 % Post-rules
 %
 
-post_hierarchical_rule(A, A) :- true.
+post_hierarchical_rule(A, A) :- false.
+
+post_hierarchical_rule(
+  element(font, Attrs, Children),
+  element(font, AttrsOut, Transformed)
+) :-
+  attribute_tag(joined, Attrs, AttrsOut),
+  maplist(arg(1), Children, Transformed0),
+  reverse(Transformed0, Transformed1),
+  foldl(string_concat, Transformed1, '', Transformed).
+
+
+post_hierarchical_rule(
+  element(font, Attrs, Children),
+  element(span, [class=Style], Children)
+) :-
+  member(joined, Attrs),
+  member(name = FontName, Attrs),
+  font_name_style(FontName, Style).
 
 
 %
@@ -80,8 +99,15 @@ post_hierarchical_rule(A, A) :- true.
 %
 leaf_rule('\n', removed).
 
-leaf_rule(element(char, Attrs, _Children), C) :-
+leaf_rule(element(char, Attrs, _Children), char(C)) :-
   member(c = C, Attrs).
+
+
+%
+% Util for tagging attributes
+%
+attribute_tag(Tag, A, [Tag | A]) :-
+  \+ member(Tag, A).
 
 %
 % Notes
@@ -90,3 +116,5 @@ leaf_rule(element(char, Attrs, _Children), C) :-
 % for tracing
 note(_El) :- true.
 note(_El, _Tag) :- true.
+
+
