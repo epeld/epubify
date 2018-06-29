@@ -1,5 +1,5 @@
 :- module(stext, [stext/2]).
-:- use_module(transform, [transform/3]).
+:- use_module(transform, [apply_rule/3]).
 :- use_module(file, [with_open_file/4]).
 :- use_module(document, [transformation/2]).
 
