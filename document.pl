@@ -15,6 +15,11 @@ hierarchical_element(El) :-
 transformation(A, B) :-
   hierarchical_rule(A, B).
 
+
+hierarchical_rule(El, Out) :-
+  \+ hierarchical_element(El),
+  leaf_rule(El, Out).
+
 hierarchical_rule(
   element(El, Attrs, Children),
   Out
@@ -22,26 +27,66 @@ hierarchical_rule(
   hierarchical_element(El),
 
   % PRE
-  apply_rule(
+  apply_singleton_rule(
     document:pre_hierarchical_rule,
     element(El, Attrs, Children),
     Out1
   ),
 
+  note(El, children),
+
   % CHILDREN
   Out1 = element(El1, Attrs1, Children1),
-  transform(
-    hierarchical_rule,
+  apply_element_rule(
+    document:hierarchical_rule,
     Children1,
     Children2
   ),
 
+  note(El, children(done)),
+
   % POST
-  apply_rule(
+  apply_singleton_rule(
     document:post_hierarchical_rule,
     element(El1, Attrs1, Children2),
     Out
-  ).
+  ),
+  note(El, post).
 
-pre_hierarchical_rule(A, A) :- false.
-post_hierarchical_rule(A, A) :- false.
+
+%
+% Pre-rules
+%
+pre_hierarchical_rule(
+  element(El, A, C),
+  element(El, [ pre | A], C)
+) :- note(El, pre), false.
+
+pre_hierarchical_rule(
+  A,
+  removed
+) :- atom(A).
+
+
+%
+% Post-rules
+%
+
+post_hierarchical_rule(A, A) :- true.
+
+
+%
+% Leaf-rules
+%
+leaf_rule('\n', removed).
+
+leaf_rule(element(char, Attrs, _Children), C) :-
+  member(c = C, Attrs).
+
+%
+% Notes
+%
+
+% for tracing
+note(_El) :- true.
+note(_El, _Tag) :- true.
