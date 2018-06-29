@@ -1,14 +1,17 @@
 :- module(transform, [transform/2]).
 :- use_module(font, [font_rule/3]).
 
-transform(Xml, Out) :- 
-  maplist(apply_rule, Xml, Out0),
+transform(Xml, Out) :-
+  transform(myrule, Xml, Out).
+
+transform(Goal, Xml, Out) :- 
+  maplist(apply_rule(Goal), Xml, Out0),
   exclude(=(success(removed)),Out0, Out1),
   maplist(get_element, Out1, Out2),
   (
     (
       member(success(_), Out1)
-    )*-> (!, transform(Out2, Out))
+    )*-> (!, transform(Goal, Out2, Out))
   ; Out2 = Out
   ).
 
@@ -16,8 +19,8 @@ transform(Xml, Out) :-
 %
 % Perform transformation rules recursively
 % until no more transformations apply
-apply_rule(Element, Out) :-
-  (myrule(Element, Out0), Out0 \= Element) *->
+apply_rule(Goal,Element, Out) :-
+  (call(Goal, Element, Out0), Out0 \= Element) *->
     (
       Out = success(Out0)
     )
@@ -37,7 +40,7 @@ get_element(failure(R), R).
 myrule(element(font, A, Text), Out) :-
   font_rule(Name, Out0, Out),
   member(Name, A),
-  transform(Text, Out0).
+  transform(myrule, Text, Out0).
 
 
 myrule(element(page, _A, Children),
