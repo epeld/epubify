@@ -1,13 +1,20 @@
-:- module(transform, [transform/3]).
+:- module(transform,
+          [
+            apply_rule/3,
+            apply_element_rule/3
+          ]).
 :- use_module(font, [font_rule/3]).
 :- use_module(bbox, [bbox_x/2]).
 
+% deprecated
+transform(G, A, B) :- apply_element_rule(G, A, B).
+
 %
-% Apply a transformation rule to In producing Out.
+% Apply a transformation rule to list In producing list Out.
 % the transformation predicate is applied repeatedly
 % until it no longer succeeds
 %
-transform(Goal, In, Out) :- 
+apply_element_rule(Goal, In, Out) :- 
   maplist(apply_rule(Goal), In, Out0),
   exclude(=(success(removed)),Out0, Out1),
   maplist(get_element, Out1, Out2),

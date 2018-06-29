@@ -1,6 +1,7 @@
 :- module(stext, [stext/2]).
 :- use_module(transform, [transform/3]).
 :- use_module(file, [with_open_file/4]).
+:- use_module(document, [transformation/2]).
 
 
 stext(test, Page) :-
@@ -10,9 +11,9 @@ stext(file(FileName), Page) :-
   stext_from_file(FileName, Page).
 
 stext(Input) :-
-  load_xml(stream(Input), Xml, []),
+  load_xml(stream(Input), [Document | _], []),
   format("Transforming..~n"),
-  transform(myrule:myrule, Xml, XmlOut),
+  apply_rule(transformation, Document, XmlOut),
   format("Done..~n"),
   !,
   with_open_file("/tmp/out.txt", write, [],
