@@ -23,9 +23,9 @@ hierarchical_rule(
 
   % PRE
   apply_rule(
-    pre_hierarchical_rule,
+    document:pre_hierarchical_rule,
     element(El, Attrs, Children),
-    Out1,
+    Out1
   ),
 
   % CHILDREN
@@ -38,7 +38,10 @@ hierarchical_rule(
 
   % POST
   apply_rule(
-    post_hierarchical_rule
+    document:post_hierarchical_rule,
     element(El1, Attrs1, Children2),
     Out
   ).
+
+pre_hierarchical_rule(A, A) :- false.
+post_hierarchical_rule(A, A) :- false.
