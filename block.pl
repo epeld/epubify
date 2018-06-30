@@ -14,6 +14,7 @@
               ]).
 :- use_module(list, [all_but_last/3]).
 
+% TODO does this have to return a list?
 join_blocks(
   element(block, A, B),
   element(block, A2, B2),
