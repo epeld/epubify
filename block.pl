@@ -1,7 +1,5 @@
 :- module(block,
           [
-            block_rule/2,
-            is_paragraphed_block/1,
             join_blocks/3
           ]).
 :- use_module(attribute, [attribute_tag/3]).
