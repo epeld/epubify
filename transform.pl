@@ -4,6 +4,9 @@
             apply_element_rule/3
           ]).
 :- use_module(bbox, [bbox_x/2]).
+:- meta_predicate
+    apply_element_rule(2, ?, ?),
+    apply_singleton_rule(2, ?, ?).
 
 % deprecated
 transform(G, A, B) :- apply_element_rule(G, A, B).
