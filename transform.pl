@@ -3,7 +3,6 @@
             apply_singleton_rule/3,
             apply_element_rule/3
           ]).
-:- use_module(font, [font_rule/3]).
 :- use_module(bbox, [bbox_x/2]).
 
 % deprecated

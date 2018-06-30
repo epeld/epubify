@@ -1,5 +1,5 @@
 :- module(document, [transformation/2]).
-:- use_module(transform, [apply_element_rule/3, apply_rule/3]).
+:- use_module(transform, [apply_element_rule/3]).
 :- use_module(font, [font_name_style/2]).
 
 hierarchy([document, page, block, line, font]).
