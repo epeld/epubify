@@ -73,8 +73,6 @@ pre_hierarchical_rule(
 % Post-rules
 %
 
-post_hierarchical_rule(A, A) :- false.
-
 post_hierarchical_rule(
   element(font, Attrs, Children),
   element(font, AttrsOut, Transformed)
