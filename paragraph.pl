@@ -2,7 +2,14 @@
           [
             lines_to_paragraphs/2
           ]).
-% :- use_module(attribute, [attribute_tag/3]).
+:- use_module(attribute, [attribute_tag/3]).
+
+paragraph_tag(AIn, AOut) :-
+  A = (paragraphs = true), % TODO
+  attribute_tag(A, AIn, AOut).
+
+join_paragraphs(
+).
 
 
 lines_to_paragraphs(
