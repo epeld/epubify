@@ -6,15 +6,15 @@
 
 
 % tarpit.pdf
-font_rule(name='CMTI10', Children, italic(Children)).
-font_rule(name='CMBX12', Children, heading(2, Children)).
+deprecated_font_stuff(name='CMTI10', Children, italic(Children)).
+deprecated_font_stuff(name='CMBX12', Children, heading(2, Children)).
 
 % halmos.pdf
-font_rule(name='CMBX10', Children, heading(1, Children)).
-font_rule(name='CMCSC10', Children, heading(2, Children)).
-font_rule(name='CMR8', Children, subtitle(Children)).
-font_rule(name='CMR10', Children, body(Children)).
-font_rule(name='CMR7', Children, footer(Children)).
+deprecated_font_stuff(name='CMBX10', Children, heading(1, Children)).
+deprecated_font_stuff(name='CMCSC10', Children, heading(2, Children)).
+deprecated_font_stuff(name='CMR8', Children, subtitle(Children)).
+deprecated_font_stuff(name='CMR10', Children, body(Children)).
+deprecated_font_stuff(name='CMR7', Children, footer(Children)).
 
 
 
