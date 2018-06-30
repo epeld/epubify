@@ -14,6 +14,10 @@
                 paragraph_attr/1
               ]).
 :- use_module(list, [all_but_last/3]).
+:- use_module(document, [post_hierarchical_rule/2]).
+
+document:post_hierarchical_rule(El, ElOut) :-
+  block_rule(El, ElOut).
 
 % TODO does this have to return a list?
 join_blocks(
