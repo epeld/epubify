@@ -1,6 +1,7 @@
 :- module(paragraph,
           [
-            lines_to_paragraphs/2
+            lines_to_paragraphs/2,
+            join_paragraphs/3
           ]).
 :- use_module(attribute, [attribute_tag/3]).
 
