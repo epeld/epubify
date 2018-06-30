@@ -1,5 +1,14 @@
-:- module(bbox, [bbox_x/2]).
+:- module(bbox,
+          [
+            bbox_x/2,
+            element_bbox_x/2
+          ]).
+:- use_module(attribute, [element_attribute/2]).
 
+
+element_bbox_x(El, X) :-
+  element_attribute(El, bbox=Bbox),
+  bbox_x(Bbox, X).
 
 % Given a bbox-attribute, parse out the x-coordiante
 bbox_x(Bbox, X) :-
