@@ -60,4 +60,4 @@ assert_all(Goal, [I | Rest]) :-
   ; throw(bad_assumption(every_element, Goal, Items))
   ).
 
-assert_all(Goal, []).
+assert_all(_Goal, []).
