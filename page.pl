@@ -25,8 +25,14 @@ page_rule(
 
   Children = [Page | Pages],
 
-  % TODO: this is going to be slooow when there are many pages
-  foldl(join_pages, Pages, Page, Transformed).
+  % Note: possible slow down due to always traversing
+  % the accumulator to find the last block
+  foldl(join_pages_rev, Pages, Page, Transformed).
+
+
+% Flipped version of join_pages, to work with foldl
+join_pages_rev(Page2, Page1, Joined) :-
+  join_pages(Page1, Page2, Joined).
 
 
 % Joining two pages into one
