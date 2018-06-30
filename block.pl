@@ -10,7 +10,8 @@
                 lines_to_paragraphs/2,
                 join_paragraphs/3,
                 paragraph_tag/2,
-                is_paragraphed/1
+                is_paragraphed/1,
+                paragraph_attr/1
               ]).
 :- use_module(list, [all_but_last/3]).
 
