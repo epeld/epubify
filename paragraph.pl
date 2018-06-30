@@ -9,8 +9,44 @@ paragraph_tag(AIn, AOut) :-
   attribute_tag(A, AIn, AOut).
 
 join_paragraphs(
-).
+  element(paragraph, _A, B),
+  element(paragraph, _A2, B2),
+  Out
+) :-
+  % A paragraph can be joined to the one before it if:
+  % it does not seem to be indented relative to the last line
+  % in the previous paragraph
+  all_but_last(B, BAllButLast, BLast),
+  B2 = [B2First | B2AllButFirst],
 
+  % TODO add section here verifying fonts match
+  % or else, don't join
+  
+  join_paragraphs(BLast, B2First, BAllButLast, B2AllButFirst, Out).
+
+join_paragraphs(BLast, B2First, BAllButLast, B2AllButFirst, Out) :-
+  element_bbox_x(BLast, X0),
+  element_bbox_x(B2First, X),
+  X0 >= X,
+
+  % Second line is not indented relative to first, so join paragraphs
+  append([BAllButLast, [BLast], [B2First], B2AllButFirst], Joined),
+  Out = [
+    element(paragraph, [joined = true, paragraphs = true], Joined)
+  ].
+
+join_paragraphs(BLast, B2First, BAllButLast, B2AllButFirst, Out) :-
+  element_bbox_x(BLast, X0),
+  element_bbox_x(B2First, X),
+  X0 < X,
+
+  % Second paragraph is indented. Don't join
+  append([BAllButLast, BLast], P1),
+  append([B2First, B2AllButFirst], P2),
+  Out = [
+    element(paragraph, [paragraphs = true, joined = false], P1),
+    element(paragraph, [paragraphs = true, joined = false], P2)
+  ].
 
 lines_to_paragraphs(
   Lines,
