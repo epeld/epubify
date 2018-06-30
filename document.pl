@@ -79,19 +79,10 @@ post_hierarchical_rule(
   element(font, Attrs, Children),
   element(font, AttrsOut, Transformed)
 ) :-
-  attribute_tag(joined, Attrs, AttrsOut),
-  maplist(arg(1), Children, Transformed0),
-  reverse(Transformed0, Transformed1),
-  foldl(string_concat, Transformed1, '', Transformed).
-
-
-post_hierarchical_rule(
-  element(font, Attrs, Children),
-  element(span, [class=Style], Children)
-) :-
-  member(joined, Attrs),
-  member(name = FontName, Attrs),
-  font_name_style(FontName, Style).
+  font_rule(
+    element(font, Attrs, Children),
+    element(font, AttrsOut, Transformed)
+  ).
 
 
 %

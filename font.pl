@@ -1,6 +1,6 @@
 :- module(font,
           [
-            font_rule/3,
+            font_rule/2,
             font_name_style/2
           ]).
 
@@ -28,3 +28,32 @@ font_name_style('CMCSC10', heading(2)).
 font_name_style('CMR8', subtitle).
 font_name_style('CMR10', regular).
 font_name_style('CMR7', footer).
+
+
+%
+% Font-specific transformations
+%
+font_rule(El, ElOut) :-
+  join_chars(El, ElOut).
+
+font_rule(El, ElOut) :-
+  classify_font(El, ElOut).
+
+% join chars into strings as much as possible
+join_chars(
+  element(font, Attrs, Children),
+  element(font, AttrsOut, Transformed)
+) :-
+  attribute_tag(joined, Attrs, AttrsOut),
+  maplist(arg(1), Children, Transformed0),
+  reverse(Transformed0, Transformed1),
+  foldl(string_concat, Transformed1, '', Transformed).
+
+classify_font(
+  element(font, Attrs, Children),
+  element(font, [class=Style | Attrs], Children)
+) :-
+  \+ member(class=_, Attrs),
+  member(joined, Attrs),
+  member(name = FontName, Attrs),
+  font_name_style(FontName, Style).
