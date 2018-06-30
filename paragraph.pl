@@ -69,14 +69,21 @@ lines_to_paragraphs(
   Lines,
   Paragraphs
 ) :-
-  % TODO: need to reverse the lines inside the paragraph here
-  % AND convert paragraph(C) -> element(paragraph, [], C)
   lines_to_paragraphs(
     none,
     Lines,
     [],
-    Paragraphs
-  ).
+    ParagraphsR0
+  ),
+  reverse(ParagraphsR0, Paragraphs0),
+  maplist(make_paragraph_element, Paragraphs0, Paragraphs).
+
+
+make_paragraph_element(
+  paragraph(Lines0),
+  element(paragraph, [], Lines)
+) :-
+  reverse(Lines0, Lines).
 
 
 % if a line is indented more than the previous
