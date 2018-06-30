@@ -17,7 +17,7 @@
 join_blocks(
   element(block, A, B),
   element(block, A2, B2),
-  element(block, AJoined, BJoined)
+  element(block, [joined], BJoined)
 ) :-
   is_paragraphed(element(block, A, B)),
   is_paragraphed(element(block, A2, B2)),
