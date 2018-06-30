@@ -2,8 +2,14 @@
           [
             % TODO
           ]).
-:- use_module(attribute, [attribute_tag/2, element_attribute/2]).
-:- use_module(block, [join_blocks/3, is_paragraphed_block/1]).
+:- use_module(attribute,
+              [
+                attribute_tag/2,
+                element_attribute/2,
+                is_paragraphed/1,
+                paragraph_tag/2
+              ]).
+:- use_module(block, [join_blocks/3]).
 :- use_module(list, [all_but_last/3]).
 
 
@@ -12,12 +18,14 @@ page_rule(
   element(page, AttrsOut, Transformed),
 ) :-
   maplist(
-    is_paragraphed_block,
+    is_paragraphed,
     Children
   ),
-  attribute_tag(paragraphs = true, Attrs, AttrsOut),
+  paragraph_tag(Attrs, AttrsOut),
 
   Children = [Page | Pages],
+
+  % TODO: this is going to be slooow when there are many pages
   foldl(join_pages, Pages, Page, Transformed).
 
 
