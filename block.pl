@@ -48,14 +48,6 @@ block_rule(
 % TODO move to line.pl?
 is_line(element(line, _A, _C)).
 
-is_paragraphed_block(
-  element(block, A, _C)
-) :-
-  paragraph_attr(Attr),
-  member(Attrs, A).
-
-
-paragraph_attr(paragraphs = true).
 
 
 assert_all(Goal, [I | Rest]) :-
