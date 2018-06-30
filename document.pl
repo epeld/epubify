@@ -95,12 +95,6 @@ leaf_rule(element(char, Attrs, _Children), char(C)) :-
 
 
 %
-% Util for tagging attributes
-%
-attribute_tag(Tag, A, [Tag | A]) :-
-  \+ member(Tag, A).
-
-%
 % Notes
 %
 

@@ -3,6 +3,7 @@
             font_rule/2,
             font_name_style/2
           ]).
+:- use_module(attribute, [attribute_tag/3]).
 
 
 % tarpit.pdf
