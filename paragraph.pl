@@ -53,7 +53,8 @@ lines_to_paragraphs(
     ParagraphsOut
   ).
 
-
+% The first line is assumed to be a new paragraph
+% (we can correct this error on page-level later)
 lines_to_paragraphs(
   none,
   [Line | Rest],
