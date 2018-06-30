@@ -36,8 +36,7 @@ block_rule(
   element(block, Attrs, Children),
   element(block, AttrsOut, Transformed)
 ) :-
-  paragraph_attr(Attr),
-  attribute_tag(Attr, Attrs, AttrsOut),
+  paragraph_tag(Attrs, AttrsOut),
   assert_all(is_line, Children),
 
   lines_to_paragraphs(Children, Transformed).
