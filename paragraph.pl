@@ -17,7 +17,7 @@ is_paragraphed(Element) :-
 paragraph_attr(paragraphs = true).
 
 paragraph_tag(AIn, AOut) :-
-  paragraph_attr(paragraphs = true),
+  paragraph_attr(A),
   attribute_tag(A, AIn, AOut).
 
 
