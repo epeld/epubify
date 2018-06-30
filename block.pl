@@ -19,14 +19,15 @@ join_blocks(
   element(block, A2, B2),
   element(block, AJoined, BJoined)
 ) :-
-  is_paragraphed_block(element(block, A, B)),
-  is_paragraphed_block(element(block, A2, B2)),
+  is_paragraphed(element(block, A, B)),
+  is_paragraphed(element(block, A2, B2)),
 
   % We will keep all children
   % except possibly the last in B and first in B2
   % which might have to be joined
   all_but_last(B, BAllButLast, BLast),
   B2 = [B2First | B2AllButFirst],
+
   join_paragraphs(B, B2, BB2),
 
   append([BAllButLast, BB2, B2AllButFirst], Joined).
