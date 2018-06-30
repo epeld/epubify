@@ -10,6 +10,7 @@
                 attribute_tag/3,
                 element_attribute/2
               ]).
+:- use_module(bbox, [element_bbox_x/2]).
 
 is_paragraphed(Element) :-
   element_attribute(Element, A),
