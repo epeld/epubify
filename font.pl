@@ -64,7 +64,7 @@ font_rule(El, ElOut) :-
 % join chars into strings as much as possible
 join_chars(
   element(font, Attrs, Children),
-  element(font, AttrsOut, Transformed)
+  element(font, AttrsOut, [Transformed])
 ) :-
   attribute_tag(joined, Attrs, AttrsOut),
   maplist(arg(1), Children, Transformed0),
