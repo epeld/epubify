@@ -8,6 +8,7 @@ paragraph_tag(AIn, AOut) :-
   A = (paragraphs = true), % TODO
   attribute_tag(A, AIn, AOut).
 
+
 join_paragraphs(
   element(paragraph, _A, B),
   element(paragraph, _A2, B2),
@@ -48,10 +49,13 @@ join_paragraphs(BLast, B2First, BAllButLast, B2AllButFirst, Out) :-
     element(paragraph, [paragraphs = true, joined = false], P2)
   ].
 
+
 lines_to_paragraphs(
   Lines,
   Paragraphs
 ) :-
+  % TODO: need to reverse the lines inside the paragraph here
+  % AND convert paragraph(C) -> element(paragraph, [], C)
   lines_to_paragraphs(
     none,
     Lines,
