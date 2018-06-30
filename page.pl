@@ -5,7 +5,10 @@
 :- use_module(attribute,
               [
                 attribute_tag/2,
-                element_attribute/2,
+                element_attribute/2
+              ]).
+:- use_module(paragraph,
+              [
                 is_paragraphed/1,
                 paragraph_tag/2
               ]).
@@ -15,7 +18,7 @@
 
 page_rule(
   element(page, Attrs, Children),
-  element(page, AttrsOut, Transformed),
+  element(page, AttrsOut, Transformed)
 ) :-
   maplist(
     is_paragraphed,
@@ -37,8 +40,8 @@ join_pages_rev(Page2, Page1, Joined) :-
 
 % Joining two pages into one
 join_pages(
-  element(page, A, B),
-  element(page, A2, B2),
+  element(page, _A, B),
+  element(page, _A2, B2),
   element(page, [joined], Joined)
 ) :-
   % We will keep all children
@@ -47,7 +50,7 @@ join_pages(
 
   all_but_last(B, BAllButLast, BLast),
   B2 = [B2First | B2AllButFirst],
-  join_blocks(B, B2, BB2),
+  join_blocks(BLast, B2First, BB2),
 
   append([BAllButLast, BB2, B2AllButFirst], Joined).
 
