@@ -35,7 +35,6 @@ lines_to_paragraphs(
   line_bbox(PrevLine, X0),
   line_bbox(Line, X),
   X0 < X,
-  ParagraphsOut = [paragraph([Line]) | Paragraphs],
   lines_to_paragraphs(
     Line,
     Rest,
