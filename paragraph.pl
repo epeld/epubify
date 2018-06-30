@@ -73,8 +73,8 @@ lines_to_paragraphs(
   Paragraphs,
   ParagraphsOut
 ) :-
-  line_bbox(PrevLine, X0),
-  line_bbox(Line, X),
+  element_bbox_x(PrevLine, X0),
+  element_bbox_x(Line, X),
   X0 < X,
   lines_to_paragraphs(
     Line,
@@ -91,8 +91,8 @@ lines_to_paragraphs(
   [paragraph(Lines) | Paragraphs],
   ParagraphsOut
 ) :-
-  line_bbox(PrevLine, X0),
-  line_bbox(Line, X),
+  element_bbox_x(PrevLine, X0),
+  element_bbox_x(Line, X),
   X =< X0,
   lines_to_paragraphs(
     Line,
