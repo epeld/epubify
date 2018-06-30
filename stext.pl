@@ -1,8 +1,11 @@
-:- module(stext, [stext/2]).
+:- module(stext, [stext/2, stext/0]).
 :- use_module(transform, [apply_singleton_rule/3]).
 :- use_module(file, [with_open_file/4]).
 :- use_module(document, [transformation/2]).
 
+stext :-
+  current_prolog_flag(argv, [FileName, Page]),
+  stext(FileName, Page).
 
 stext(test, Page) :-
   stext_from_testfile(Page).
