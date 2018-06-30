@@ -14,7 +14,20 @@
               ]).
 :- use_module(block, [join_blocks/3]).
 :- use_module(list, [all_but_last/3]).
+:- use_module(document, [post_hierarchical_rule/2, all_children/2]).
 
+document:post_hierarchical_rule(El, ElOut) :- footer_rule(El, ElOut).
+
+
+footer_rule(
+  element(page, Attrs, Children),
+  element(page, Attrs, Children0)
+) :-
+  all_but_last(Children, Children0, Last),
+  all_children(Last, [String]),
+  numerical(String).
+
+numerical(_S) :- true.
 
 page_rule(
   element(page, Attrs, Children),

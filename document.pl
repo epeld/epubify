@@ -1,5 +1,6 @@
 :- module(document,
           [
+            all_children/2,
             transformation/2,
             leaf_rule/2,
             post_hierarchical_rule/2,
@@ -19,6 +20,17 @@ hierarchical_element(El) :-
   hierarchy(H),
   member(El, H).
 
+
+%
+% Utils
+%
+all_children(V, [V]) :-
+  V \= element(_1, _2, _3).
+
+all_children(element(_El, _A, C),
+             Children) :-
+  maplist(all_children, C, Cs),
+  append(Cs, Children).
 
 %
 % Rules
