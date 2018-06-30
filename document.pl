@@ -50,7 +50,7 @@ hierarchical_rule(
   % CHILDREN
   Out1 = element(El1, Attrs1, Children1),
   apply_element_rule(
-    document:hierarchical_rule,
+    hierarchical_rule,
     Children1,
     Children2
   ),
@@ -59,7 +59,7 @@ hierarchical_rule(
 
   % POST
   apply_singleton_rule(
-    document:post_hierarchical_rule,
+    post_hierarchical_rule,
     element(El1, Attrs1, Children2),
     Out
   ),
