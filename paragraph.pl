@@ -129,4 +129,5 @@ lines_to_paragraphs(
     [paragraph([Line])],
     ParagraphsOut
   ).
-    
+
+lines_to_paragraphs(_Prev, [], P, P).
