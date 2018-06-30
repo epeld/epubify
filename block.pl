@@ -28,9 +28,9 @@ join_blocks(
   all_but_last(B, BAllButLast, BLast),
   B2 = [B2First | B2AllButFirst],
 
-  join_paragraphs(B, B2, BB2),
+  join_paragraphs(BLast, B2First, BB2),
 
-  append([BAllButLast, BB2, B2AllButFirst], Joined).
+  append([BAllButLast, BB2, B2AllButFirst], BJoined).
   
 
 block_rule(
