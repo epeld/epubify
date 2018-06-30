@@ -9,13 +9,24 @@ block_rule(
   element(block, Attrs, Children),
   element(block, AttrsOut, Transformed)
 ) :-
-  attribute_tag(paragraphs = true, Attrs, AttrsOut),
+  paragraph_attr(Attr),
+  attribute_tag(Attr, Attrs, AttrsOut),
   assert_all(is_line, Children),
 
   lines_to_paragraphs(Children, Transformed).
 
 
+% TODO move to line.pl?
 is_line(element(line, _A, _C)).
+
+is_paragraphed_block(
+  element(block, A, _C)
+) :-
+  paragraph_attr(Attr),
+  member(Attrs, A).
+
+
+paragraph_attr(paragraphs = true).
 
 
 assert_all(Goal, [I | Rest]) :-
