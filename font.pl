@@ -4,6 +4,11 @@
             font_name_style/2
           ]).
 :- use_module(attribute, [attribute_tag/3]).
+:- use_module(document,
+              [
+                post_hierarchical_rule/2,
+                leaf_rule/2
+              ]).
 
 
 % tarpit.pdf
@@ -29,6 +34,22 @@ font_name_style('CMCSC10', heading(2)).
 font_name_style('CMR8', subtitle).
 font_name_style('CMR10', regular).
 font_name_style('CMR7', footer).
+
+
+%
+% Element transformations
+%
+document:post_hierarchical_rule(
+  element(font, Attrs, Children),
+  element(font, AttrsOut, Transformed)
+) :-
+  font_rule(
+    element(font, Attrs, Children),
+    element(font, AttrsOut, Transformed)
+  ).
+
+% Font-elements typically contain newline atoms
+document:leaf_rule('\n', removed).
 
 
 %
