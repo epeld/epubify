@@ -1,12 +1,23 @@
 :- module(paragraph,
           [
             lines_to_paragraphs/2,
-            join_paragraphs/3
+            join_paragraphs/3,
+            is_paragraphed/1
           ]).
-:- use_module(attribute, [attribute_tag/3]).
+:- use_module(attribute,
+              [
+                attribute_tag/3,
+                element_attribute/2
+              ]).
+
+is_paragraphed(Element) :-
+  element_attribute(Element, A),
+  paragraph_attr(A).
+
+paragraph_attr(paragraphs = true).
 
 paragraph_tag(AIn, AOut) :-
-  A = (paragraphs = true), % TODO
+  paragraph_attr(paragraphs = true),
   attribute_tag(A, AIn, AOut).
 
 
