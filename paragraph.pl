@@ -138,3 +138,31 @@ lines_to_paragraphs(
   ).
 
 lines_to_paragraphs(_Prev, [], P, P).
+
+
+heading_rule(
+  element(paragraph, _Attrs, Children),
+  element(H, [], HChildren)
+) :-
+  Children = [Line],
+
+  element_children(Line, LineChildren),
+  element_tag(Line, line),
+  LineChildren = [Font],
+
+  element_children(Font, FontChildren),
+  element_tag(Font, font),
+  FontChildren = HChildren,
+
+  element_attribute(Font, class = heading(N)),
+  heading_tag(H, N).
+
+
+element_tag(element(El, _1, _2), El).
+
+
+heading_tag(h1, 1).
+heading_tag(h2, 2).
+heading_tag(h3, 3).
+heading_tag(h4, 4).
+heading_tag(h5, 5).
