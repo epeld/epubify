@@ -34,6 +34,8 @@ font_name_style('CMCSC10', heading(2)).
 font_name_style('CMR8', subtitle).
 font_name_style('CMR10', regular).
 font_name_style('CMR7', footer).
+font_name_style('CMR6', footnote(reference)).
+font_name_style('CMR9', footnote(text)).
 
 
 %
