@@ -4,14 +4,18 @@
             join_paragraphs/3,
             is_paragraphed/1,
             paragraph_tag/2,
-            paragraph_attr/1
+            paragraph_attr/1,
+            heading_rule/2
           ]).
 :- use_module(attribute,
               [
                 attribute_tag/3,
-                element_attribute/2
+                element_attribute/2,
+                element_children/2,
+                element_tag/2
               ]).
 :- use_module(bbox, [element_bbox_x/2]).
+
 
 is_paragraphed(Element) :-
   element_attribute(Element, A),
@@ -140,6 +144,7 @@ lines_to_paragraphs(
 lines_to_paragraphs(_Prev, [], P, P).
 
 
+% Identifies paragraphs that contain headings and promotes them
 heading_rule(
   element(paragraph, _Attrs, Children),
   element(H, [], HChildren)
@@ -156,9 +161,6 @@ heading_rule(
 
   element_attribute(Font, class = heading(N)),
   heading_tag(H, N).
-
-
-element_tag(element(El, _1, _2), El).
 
 
 heading_tag(h1, 1).
