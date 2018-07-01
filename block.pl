@@ -9,7 +9,8 @@
                 join_paragraphs/3,
                 paragraph_tag/2,
                 is_paragraphed/1,
-                paragraph_attr/1
+                paragraph_attr/1,
+                heading_rule/2
               ]).
 :- use_module(list, [all_but_last/3]).
 :- use_module(document, [post_hierarchical_rule/2]).
@@ -44,6 +45,13 @@ block_rule(
   assert_all(is_line, Children),
 
   lines_to_paragraphs(Children, Transformed).
+
+
+block_rule(
+  element(block, A, [P]),
+  element(block, A, [H])
+) :-
+  heading_rule(P, H).
 
 
 
